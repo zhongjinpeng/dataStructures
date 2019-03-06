@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+		<title>树</title>
+	</head>
+<body>
+<h1>树</h1>
+
+<h2>树的基本概念</h2>
+
+<ul>
+	<li>一棵树是一些节点的集合</li>
+	<li>没有儿子的节点称为<strong>树叶</strong></li>
+	<li>任意节点的<strong>深度(depth)</strong>为从根到该节点的唯一路径的长，<strong>根的深度为0</strong></li>
+	<li>任一节点的<strong>高度(height)</strong>为当前节点到一片树叶的最长路径的长，所有<strong>树叶的深度为0</strong></li>
+	<li>一棵树的深度等于它的最深的树叶的深度；该深度总是等于这棵树的高度</li>
+	<li>如果存在从n1到n2的一条路径，那么n1是n2的<strong>祖先(ancestor)</strong>而n2是n1的一个<strong>后裔(descendant)</strong>。如果n1 ! = n2，那么n1是n2的<strong>真祖先(proper ancestor)</strong>而n2是n1的一个<strong>真后裔(proper descendant)</strong>。</li>
+</ul>
+
+<h2>树的遍历及应用</h2>
+
+<ul>
+	<li>UNIX和DOS在内的许多常用操作系统中的目录结构</li>
+	<li>先序遍历，对节点的处理工作是在它诸多儿子节点被处理之前进行的，运行时间就是O(N)</li>
+	<li>后序遍历，一个节点的处理是在它的诸多儿子节点被计算后进行的</li>
+</ul>
+
+<h2>二叉树</h2>
+
+<ul>
+	<li>二叉树是一棵树，其中每个节点都不能有多于两个的儿子</li>
+	<li>二叉树的平均深度为O(√N)。对于特殊类型的二叉树，即二叉查找树，其深度的平均值是O(logN)，最大可以达到N-1</li>
+</ul>
+
+<pre><code>/**
+* 可以通过递归的方式实现数
+**/
+public class BinaryNode {
+	private String element;
+	private BinaryNode left;
+	private BinaryNode right;
+	public BinaryNode(String element) {
+		this.element = element;
+	}
+	public BinaryNode(String element, BinaryNode left, BinaryNode right) {
+		this.element = element;
+		this.left = left;
+		this.right = right;
+	}
+        public String getElement() {
+		return element;
+	}
+	public void setElement(String element) {
+		this.element = element;
+	}
+	public BinaryNode getLeft() {
+		return left;
+	}
+	public void setLeft(BinaryNode left) {
+		this.left = left;
+	}
+	public BinaryNode getRight() {
+		return right;
+	}
+	public void setRight(BinaryNode right) {
+		this.right = right;
+	}
+}
+</code></pre>
+
+<h2>二叉查找树</h2>
+
+<ul>
+	<li>是二叉树成为二叉查找树的性质是，对于树中每一个节点X，它的左子树所有项值小于X项中的值，而它的右子树中所有项的值大于X项中的项。二叉查找树的平均深度是O(logN)</li>
+</ul>
+
+<pre><code>/**
+ * 二叉查找树
+ * @author zhongjinpeng
+ *
+ * @param &lt;AnyType&gt;
+ */
+public class BinarySearchTree&lt;AnyType extends Comparable&lt;? super AnyType&gt;&gt; {
+
+	private static class BinaryNode&lt;AnyType&gt; {
+
+		public AnyType getElement() {
+			return element;
+		}
+
+		public void setElement(AnyType element) {
+			this.element = element;
+		}
+
+		public BinaryNode&lt;AnyType&gt; getLeft() {
+			return left;
+		}
+
+		public void setLeft(BinaryNode&lt;AnyType&gt; left) {
+			this.left = left;
+		}
+
+		public BinaryNode&lt;AnyType&gt; getRight() {
+			return right;
+		}
+
+		public void setRight(BinaryNode&lt;AnyType&gt; right) {
+			this.right = right;
+		}
+
+		AnyType element;
+
+		BinaryNode&lt;AnyType&gt; left;
+
+		BinaryNode&lt;AnyType&gt; right;
+
+		BinaryNode(AnyType element) {
+			this(element, null, null);
+		}
+
+		BinaryNode(AnyType element, BinaryNode&lt;AnyType&gt; left, BinaryNode&lt;AnyType&gt; right) {
+			this.element = element;
+			this.left = left;
+			this.right = right;
+		}
+	}
+
+	private BinaryNode&lt;AnyType&gt; root;
+
+	public BinarySearchTree(BinaryNode&lt;AnyType&gt; root) {
+		this.root = root;
+	}
+
+	public void makeEmpty() {
+		root = null;
+	}
+
+	public boolean isEmpty() {
+		return root == null;
+	}
+
+	public boolean containts(AnyType x) {
+		return containts(x, root);
+	}
+
+	public AnyType findMax() {
+		if (isEmpty())
+			;
+		return findMax(root).element;
+	}
+
+	public AnyType findMin() {
+		if (isEmpty())
+			;
+		return findMin(root).element;
+	}
+
+	public void insert(AnyType x) {
+		root = insert(x, root);
+	}
+
+	public void remove(AnyType x) {
+		root = remove(x, root);
+	}
+
+	public void printTree() {
+		if(!isEmpty()) {
+			printTree(root);
+		}
+	}
+	
+	/**
+	 * 判断树t是否存在x节点，若包含返回true，否则返回false
+	 * 
+	 * @param x
+	 * @param t
+	 * @return
+	 */
+	private boolean containts(AnyType x, BinaryNode&lt;AnyType&gt; t) {
+		if (t == null) {
+			return false;
+		}
+		int compareResult = x.compareTo(t.element);
+		if (compareResult &lt; 0) {
+			return containts(x, t.left);
+		} else if (compareResult &gt; 0) {
+			return containts(x, t.right);
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * 查找数t的最大节点(非递归实现)
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private BinaryNode&lt;AnyType&gt; findMax(BinaryNode&lt;AnyType&gt; t) {
+		if (t != null) {
+			while (t.right != null) {
+				t = t.right;
+			}
+		}
+		return t;
+	}
+
+	/**
+	 * 查找树t最小的节点(尾递归实现)
+	 * 
+	 * @param t
+	 * @return
+	 */
+	private BinaryNode&lt;AnyType&gt; findMin(BinaryNode&lt;AnyType&gt; t) {
+		if (t == null) {
+			return null;
+		} else if (t.left == null) {
+			return t;
+		}
+		return findMin(t.left);
+	}
+	
+	/**
+	 * 将x插入t
+	 * @param x
+	 * @param t
+	 * @return
+	 */
+	private BinaryNode&lt;AnyType&gt; insert(AnyType x, BinaryNode&lt;AnyType&gt; t) {
+		if(t == null) {
+			return new BinaryNode&lt;AnyType&gt;(x,null,null);
+		}
+		int compareResult = x.compareTo(t.element);
+		
+		if(compareResult &lt; 0) {
+			t.left = insert(x,t.left);
+		}else if(compareResult &gt; 0) {
+			t.right = insert(x,t.right);
+		} 
+		return t;
+	}
+
+	/**
+	 * 将x从t中移除
+	 * @param x
+	 * @param t
+	 * @return
+	 */
+	private BinaryNode&lt;AnyType&gt; remove(AnyType x, BinaryNode&lt;AnyType&gt; t) {
+		if(t == null) {
+			return t;
+		}
+		int compareResult = x.compareTo(t.element);
+		if(compareResult &lt; 0) {
+			t.left = remove(x,t.left);
+		}else if(compareResult &gt; 0) {
+			t.right = remove(x,t.right);
+		}else if(t.left != null &amp;&amp; t.right != null) {
+			t.element = findMin(t.right).element;
+		}else {
+			t = (t.left != null)?t.left : t.right;
+		}
+ 		return t;
+	}
+
+	/**
+	 * 打印树t
+	 * @param t
+	 */
+	private void printTree(BinaryNode&lt;AnyType&gt; t) {	
+		if(t != null) {
+			printTree(t.left);
+			System.out.println(t.element);
+			printTree(t.right);
+		}
+	}
+
+	public static void main(String[] args) {
+		BinaryNode&lt;Integer&gt; binaryNode = new BinaryNode&lt;Integer&gt;(10000,null,null);
+		BinarySearchTree&lt;Integer&gt; binarySearchTree = new BinarySearchTree&lt;Integer&gt;(binaryNode);
+		for(int i = 0 ; i &lt;= 10 ; i++) {
+			 double d = Math.random();
+			 int x = (int)(d*10000);
+			 binarySearchTree.insert(x,binaryNode);
+		}
+		binarySearchTree.printTree();
+		System.out.println(&quot;containts{}:&quot;+binarySearchTree.containts(10000000,binaryNode));
+		System.out.println(&quot;findMax{}:&quot;+binarySearchTree.findMax());
+		System.out.println(&quot;findMin{}:&quot;+binarySearchTree.findMin());
+		binarySearchTree.insert(78,binaryNode);
+		binarySearchTree.printTree();
+		System.out.println(&quot;containts{}:&quot;+binarySearchTree.containts(10000000,binaryNode));
+		System.out.println(&quot;findMax{}:&quot;+binarySearchTree.findMax());
+		System.out.println(&quot;findMin{}:&quot;+binarySearchTree.findMin());
+		binarySearchTree.remove(10000, binaryNode);
+		binarySearchTree.printTree();
+		System.out.println(&quot;containts{}:&quot;+binarySearchTree.containts(10000000,binaryNode));
+		System.out.println(&quot;findMax{}:&quot;+binarySearchTree.findMax());
+		System.out.println(&quot;findMin{}:&quot;+binarySearchTree.findMin());
+	}
+}
+</code></pre>
+
+</body>
+</html>
+
